@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WeatherAppModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Position">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Lat" Type="Double" Nullable="false" />
+    <Property Name="Lng" Type="Double" Nullable="false" />
+    <NavigationProperty Name="Weathers" Relationship="Self.FK_Weather_Position" FromRole="Position" ToRole="Weather" />
+  </EntityType>
+  <EntityType Name="Weather">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="PositionId" Type="Int32" Nullable="false" />
+    <Property Name="Temperature" Type="Double" Nullable="false" />
+    <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ValidTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="NextUpdate" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Position" Relationship="Self.FK_Weather_Position" FromRole="Weather" ToRole="Position" />
+    <Property Name="SymbolUrl" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <Association Name="FK_Weather_Position">
+    <End Role="Position" Type="Self.Position" Multiplicity="1" />
+    <End Role="Weather" Type="Self.Weather" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Position">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Weather">
+        <PropertyRef Name="PositionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="WeatherAppEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Position" EntityType="Self.Position" />
+    <EntitySet Name="Weather" EntityType="Self.Weather" />
+    <AssociationSet Name="FK_Weather_Position" Association="Self.FK_Weather_Position">
+      <End Role="Position" EntitySet="Position" />
+      <End Role="Weather" EntitySet="Weather" />
+    </AssociationSet>
+    <FunctionImport Name="uspAddPosition" ReturnType="Collection(Decimal)">
+      <Parameter Name="Name" Mode="In" Type="String" />
+      <Parameter Name="Lat" Mode="In" Type="Double" />
+      <Parameter Name="Lng" Mode="In" Type="Double" />
+    </FunctionImport>
+    <FunctionImport Name="uspAddWeather" ReturnType="Collection(Decimal)">
+      <Parameter Name="PositionId" Mode="In" Type="Int32" />
+      <Parameter Name="Temperature" Mode="In" Type="Double" />
+      <Parameter Name="City" Mode="In" Type="String" />
+      <Parameter Name="SymbolUrl" Mode="In" Type="String" />
+      <Parameter Name="ValidTime" Mode="In" Type="DateTime" />
+      <Parameter Name="NextUpdate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="uspDeletePosition">
+      <Parameter Name="PositionId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="uspDeleteWeather">
+      <Parameter Name="PositionId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="uspGetPositionByName" ReturnType="Collection(String)">
+      <Parameter Name="Name" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="uspUpdateWeather">
+      <Parameter Name="Id" Mode="In" Type="Int32" />
+      <Parameter Name="PositionId" Mode="In" Type="Int32" />
+      <Parameter Name="Temperature" Mode="In" Type="Double" />
+      <Parameter Name="City" Mode="In" Type="String" />
+      <Parameter Name="SymbolUrl" Mode="In" Type="String" />
+      <Parameter Name="ValidTime" Mode="In" Type="DateTime" />
+      <Parameter Name="NextUpdate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="uspGetWeatherByPositionId" EntitySet="Weather" ReturnType="Collection(WeatherAppModel.Weather)">
+      <Parameter Name="PositionId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="uspDeleteWeatherByPositionId">
+      <Parameter Name="PositionId" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+</Schema>

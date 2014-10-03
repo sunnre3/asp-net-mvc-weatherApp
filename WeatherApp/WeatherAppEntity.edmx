@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="WeatherAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Position">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Lat" Type="float" Nullable="false" />
+          <Property Name="Lng" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Weather">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PositionId" Type="int" Nullable="false" />
+          <Property Name="Temperature" Type="float" Nullable="false" />
+          <Property Name="City" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="SymbolUrl" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ValidTime" Type="datetime" Nullable="false" />
+          <Property Name="NextUpdate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Weather_Position">
+          <End Role="Position" Type="Self.Position" Multiplicity="1" />
+          <End Role="Weather" Type="Self.Weather" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Weather">
+              <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="uspAddPosition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Lat" Type="float" Mode="In" />
+          <Parameter Name="Lng" Type="float" Mode="In" />
+        </Function>
+        <Function Name="uspAddWeather" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PositionId" Type="int" Mode="In" />
+          <Parameter Name="Temperature" Type="float" Mode="In" />
+          <Parameter Name="City" Type="varchar" Mode="In" />
+          <Parameter Name="SymbolUrl" Type="varchar" Mode="In" />
+          <Parameter Name="ValidTime" Type="datetime" Mode="In" />
+          <Parameter Name="NextUpdate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="uspDeletePosition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PositionId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="uspDeleteWeatherByPositionId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PositionId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="uspGetPositionByName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="uspGetWeatherByPositionId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PositionId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="uspUpdateWeather" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="PositionId" Type="int" Mode="In" />
+          <Parameter Name="Temperature" Type="float" Mode="In" />
+          <Parameter Name="City" Type="varchar" Mode="In" />
+          <Parameter Name="SymbolUrl" Type="varchar" Mode="In" />
+          <Parameter Name="ValidTime" Type="datetime" Mode="In" />
+          <Parameter Name="NextUpdate" Type="datetime" Mode="In" />
+        </Function>
+        <EntityContainer Name="WeatherAppModelStoreContainer">
+          <EntitySet Name="Position" EntityType="Self.Position" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Weather" EntityType="Self.Weather" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Weather_Position" Association="Self.FK_Weather_Position">
+            <End Role="Position" EntitySet="Position" />
+            <End Role="Weather" EntitySet="Weather" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WeatherAppModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Position">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Lat" Type="Double" Nullable="false" />
+          <Property Name="Lng" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Weathers" Relationship="Self.FK_Weather_Position" FromRole="Position" ToRole="Weather" />
+        </EntityType>
+        <EntityType Name="Weather">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="PositionId" Type="Int32" Nullable="false" />
+          <Property Name="Temperature" Type="Double" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ValidTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="NextUpdate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Position" Relationship="Self.FK_Weather_Position" FromRole="Weather" ToRole="Position" />
+          <Property Name="SymbolUrl" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_Weather_Position">
+          <End Role="Position" Type="Self.Position" Multiplicity="1" />
+          <End Role="Weather" Type="Self.Weather" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Weather">
+              <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WeatherAppEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Position" EntityType="Self.Position" />
+          <EntitySet Name="Weather" EntityType="Self.Weather" />
+          <AssociationSet Name="FK_Weather_Position" Association="Self.FK_Weather_Position">
+            <End Role="Position" EntitySet="Position" />
+            <End Role="Weather" EntitySet="Weather" />
+          </AssociationSet>
+          <FunctionImport Name="uspAddPosition" ReturnType="Collection(Decimal)">
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Lat" Mode="In" Type="Double" />
+            <Parameter Name="Lng" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="uspAddWeather" ReturnType="Collection(Decimal)">
+            <Parameter Name="PositionId" Mode="In" Type="Int32" />
+            <Parameter Name="Temperature" Mode="In" Type="Double" />
+            <Parameter Name="City" Mode="In" Type="String" />
+            <Parameter Name="SymbolUrl" Mode="In" Type="String" />
+            <Parameter Name="ValidTime" Mode="In" Type="DateTime" />
+            <Parameter Name="NextUpdate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="uspDeletePosition">
+          <Parameter Name="PositionId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="uspDeleteWeather">
+          <Parameter Name="PositionId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="uspGetPositionByName" ReturnType="Collection(String)">
+          <Parameter Name="Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspUpdateWeather">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="PositionId" Mode="In" Type="Int32" />
+            <Parameter Name="Temperature" Mode="In" Type="Double" />
+            <Parameter Name="City" Mode="In" Type="String" />
+            <Parameter Name="SymbolUrl" Mode="In" Type="String" />
+            <Parameter Name="ValidTime" Mode="In" Type="DateTime" />
+            <Parameter Name="NextUpdate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="uspGetWeatherByPositionId" EntitySet="Weather" ReturnType="Collection(WeatherAppModel.Weather)">
+          <Parameter Name="PositionId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="uspDeleteWeatherByPositionId">
+          <Parameter Name="PositionId" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WeatherAppModelStoreContainer" CdmEntityContainer="WeatherAppEntities">
+          <EntitySetMapping Name="Position">
+            <EntityTypeMapping TypeName="WeatherAppModel.Position">
+              <MappingFragment StoreEntitySet="Position">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="WeatherAppModel.Position">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="WeatherAppModel.Store.uspAddPosition">
+                  <ScalarProperty Name="Lng" ParameterName="Lng" />
+                  <ScalarProperty Name="Lat" ParameterName="Lat" />
+                  <ScalarProperty Name="Name" ParameterName="Name" />
+                  <ResultBinding Name="Id" ColumnName="Id : Integer" />
+                </InsertFunction>
+                <DeleteFunction FunctionName="WeatherAppModel.Store.uspDeletePosition" >
+                  <ScalarProperty Name="Id" ParameterName="PositionId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Weather">
+            <EntityTypeMapping TypeName="WeatherAppModel.Weather">
+              <MappingFragment StoreEntitySet="Weather">
+                <ScalarProperty Name="SymbolUrl" ColumnName="SymbolUrl" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="Temperature" ColumnName="Temperature" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="ValidTime" ColumnName="ValidTime" />
+                <ScalarProperty Name="NextUpdate" ColumnName="NextUpdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="WeatherAppModel.Weather">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="WeatherAppModel.Store.uspAddWeather">
+                  <ScalarProperty Name="SymbolUrl" ParameterName="SymbolUrl" />
+                  <ScalarProperty Name="NextUpdate" ParameterName="NextUpdate" />
+                  <ScalarProperty Name="ValidTime" ParameterName="ValidTime" />
+                  <ScalarProperty Name="City" ParameterName="City" />
+                  <ScalarProperty Name="Temperature" ParameterName="Temperature" />
+                  <ScalarProperty Name="PositionId" ParameterName="PositionId" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="WeatherAppModel.Store.uspUpdateWeather">
+                  <ScalarProperty Name="SymbolUrl" ParameterName="SymbolUrl" Version="Current" />
+                  <ScalarProperty Name="NextUpdate" ParameterName="NextUpdate" Version="Current" />
+                  <ScalarProperty Name="ValidTime" ParameterName="ValidTime" Version="Current" />
+                  <ScalarProperty Name="City" ParameterName="City" Version="Current" />
+                  <ScalarProperty Name="Temperature" ParameterName="Temperature" Version="Current" />
+                  <ScalarProperty Name="PositionId" ParameterName="PositionId" Version="Current" />
+                  <ScalarProperty Name="Id" ParameterName="Id" Version="Current" />
+                </UpdateFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="uspAddPosition" FunctionName="WeatherAppModel.Store.uspAddPosition" />
+          <FunctionImportMapping FunctionImportName="uspAddWeather" FunctionName="WeatherAppModel.Store.uspAddWeather" />
+          <FunctionImportMapping FunctionImportName="uspDeletePosition" FunctionName="WeatherAppModel.Store.uspDeletePosition" />
+          <FunctionImportMapping FunctionImportName="uspGetPositionByName" FunctionName="WeatherAppModel.Store.uspGetPositionByName" />
+          <FunctionImportMapping FunctionImportName="uspUpdateWeather" FunctionName="WeatherAppModel.Store.uspUpdateWeather" />
+          <FunctionImportMapping FunctionImportName="uspGetWeatherByPositionId" FunctionName="WeatherAppModel.Store.uspGetWeatherByPositionId">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="uspDeleteWeatherByPositionId" FunctionName="WeatherAppModel.Store.uspDeleteWeatherByPositionId" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

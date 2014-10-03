@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WeatherAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Position">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Lat" Type="float" Nullable="false" />
+    <Property Name="Lng" Type="float" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Weather">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PositionId" Type="int" Nullable="false" />
+    <Property Name="Temperature" Type="float" Nullable="false" />
+    <Property Name="City" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="SymbolUrl" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="ValidTime" Type="datetime" Nullable="false" />
+    <Property Name="NextUpdate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Weather_Position">
+    <End Role="Position" Type="Self.Position" Multiplicity="1" />
+    <End Role="Weather" Type="Self.Weather" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Position">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Weather">
+        <PropertyRef Name="PositionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="uspAddPosition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Name" Type="varchar" Mode="In" />
+    <Parameter Name="Lat" Type="float" Mode="In" />
+    <Parameter Name="Lng" Type="float" Mode="In" />
+  </Function>
+  <Function Name="uspAddWeather" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PositionId" Type="int" Mode="In" />
+    <Parameter Name="Temperature" Type="float" Mode="In" />
+    <Parameter Name="City" Type="varchar" Mode="In" />
+    <Parameter Name="SymbolUrl" Type="varchar" Mode="In" />
+    <Parameter Name="ValidTime" Type="datetime" Mode="In" />
+    <Parameter Name="NextUpdate" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="uspDeletePosition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PositionId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="uspDeleteWeatherByPositionId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PositionId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="uspGetPositionByName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Name" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="uspGetWeatherByPositionId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PositionId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="uspUpdateWeather" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Id" Type="int" Mode="In" />
+    <Parameter Name="PositionId" Type="int" Mode="In" />
+    <Parameter Name="Temperature" Type="float" Mode="In" />
+    <Parameter Name="City" Type="varchar" Mode="In" />
+    <Parameter Name="SymbolUrl" Type="varchar" Mode="In" />
+    <Parameter Name="ValidTime" Type="datetime" Mode="In" />
+    <Parameter Name="NextUpdate" Type="datetime" Mode="In" />
+  </Function>
+  <EntityContainer Name="WeatherAppModelStoreContainer">
+    <EntitySet Name="Position" EntityType="Self.Position" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Weather" EntityType="Self.Weather" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Weather_Position" Association="Self.FK_Weather_Position">
+      <End Role="Position" EntitySet="Position" />
+      <End Role="Weather" EntitySet="Weather" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

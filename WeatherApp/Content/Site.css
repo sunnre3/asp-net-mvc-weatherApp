@@ -1,0 +1,95 @@
+﻿html
+{
+	height: 100%;
+}
+
+body
+{
+	height: 100%;
+	background: rgba(84,83,84,1);
+	background: -moz-radial-gradient(center, ellipse cover, rgba(84,83,84,1) 0%, rgba(41,41,41,1) 100%);
+	background: -webkit-gradient(radial, center center, 0px, center center, 100%, , color-stop(0%, rgba(84,83,84,1)), color-stop(100%, rgba(41,41,41,1)));
+	background: -webkit-radial-gradient(center, ellipse cover, rgba(84,83,84,1) 0%, rgba(41,41,41,1) 100%);
+	background: -o-radial-gradient(center, ellipse cover, rgba(84,83,84,1) 0%, rgba(41,41,41,1) 100%);
+	background: -ms-radial-gradient(center, ellipse cover, rgba(84,83,84,1) 0%, rgba(41,41,41,1) 100%);
+	background: radial-gradient(ellipse at center, rgba(84,83,84,1) 0%, rgba(41,41,41,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#545354', endColorstr='#292929', GradientType=1 );
+	
+	/*
+	 * Typography
+	 */
+	color: #333;
+	font-family: 'Roboto Condensed', 'Arial', sans-serif;
+}
+
+.italic
+{
+	font-style: italic;
+}
+
+.bold
+{
+	font-weight: bold;
+}
+
+/*
+ * Override the default Bootstrap container width
+ */
+.container
+{
+	width: 720px;
+}
+
+#site-header h1
+{
+	font-family: 'Roboto Condensed', 'Arial', sans-serif;
+	font-size: 54px;
+	color: #fff;
+}
+
+#site-header h1 a
+{
+	color: inherit;
+}
+
+#site-header h1 a:hover
+{
+	text-decoration: none;
+}
+
+div.validation-summary-valid
+{
+	display: none;
+}
+
+table#forecast th
+{
+	text-transform: capitalize;
+}
+
+table#forecast th > small
+{
+	font-weight: normal;
+}
+
+table#forecast td,
+table#forecast th
+{
+	text-align: center;
+}
+
+a#back-anchor
+{
+	color: #333;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 12px;
+	line-height: 12px;
+}
+
+a#back-anchor span
+{
+	font-size: 20px;
+	line-height: 12px;
+	vertical-align: calc(-1px);
+}

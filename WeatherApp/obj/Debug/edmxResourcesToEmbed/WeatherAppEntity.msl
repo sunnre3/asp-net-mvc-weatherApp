@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="WeatherAppModelStoreContainer" CdmEntityContainer="WeatherAppEntities">
+    <EntitySetMapping Name="Position">
+      <EntityTypeMapping TypeName="WeatherAppModel.Position">
+        <MappingFragment StoreEntitySet="Position">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Lat" ColumnName="Lat" />
+          <ScalarProperty Name="Lng" ColumnName="Lng" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="WeatherAppModel.Position">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="WeatherAppModel.Store.uspAddPosition">
+            <ScalarProperty Name="Lng" ParameterName="Lng" />
+            <ScalarProperty Name="Lat" ParameterName="Lat" />
+            <ScalarProperty Name="Name" ParameterName="Name" />
+            <ResultBinding Name="Id" ColumnName="Id : Integer" />
+          </InsertFunction>
+          <DeleteFunction FunctionName="WeatherAppModel.Store.uspDeletePosition">
+            <ScalarProperty Name="Id" ParameterName="PositionId" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Weather">
+      <EntityTypeMapping TypeName="WeatherAppModel.Weather">
+        <MappingFragment StoreEntitySet="Weather">
+          <ScalarProperty Name="SymbolUrl" ColumnName="SymbolUrl" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+          <ScalarProperty Name="Temperature" ColumnName="Temperature" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="ValidTime" ColumnName="ValidTime" />
+          <ScalarProperty Name="NextUpdate" ColumnName="NextUpdate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="WeatherAppModel.Weather">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="WeatherAppModel.Store.uspAddWeather">
+            <ScalarProperty Name="SymbolUrl" ParameterName="SymbolUrl" />
+            <ScalarProperty Name="NextUpdate" ParameterName="NextUpdate" />
+            <ScalarProperty Name="ValidTime" ParameterName="ValidTime" />
+            <ScalarProperty Name="City" ParameterName="City" />
+            <ScalarProperty Name="Temperature" ParameterName="Temperature" />
+            <ScalarProperty Name="PositionId" ParameterName="PositionId" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="WeatherAppModel.Store.uspUpdateWeather">
+            <ScalarProperty Name="SymbolUrl" ParameterName="SymbolUrl" Version="Current" />
+            <ScalarProperty Name="NextUpdate" ParameterName="NextUpdate" Version="Current" />
+            <ScalarProperty Name="ValidTime" ParameterName="ValidTime" Version="Current" />
+            <ScalarProperty Name="City" ParameterName="City" Version="Current" />
+            <ScalarProperty Name="Temperature" ParameterName="Temperature" Version="Current" />
+            <ScalarProperty Name="PositionId" ParameterName="PositionId" Version="Current" />
+            <ScalarProperty Name="Id" ParameterName="Id" Version="Current" />
+          </UpdateFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="uspAddPosition" FunctionName="WeatherAppModel.Store.uspAddPosition" />
+    <FunctionImportMapping FunctionImportName="uspAddWeather" FunctionName="WeatherAppModel.Store.uspAddWeather" />
+    <FunctionImportMapping FunctionImportName="uspDeletePosition" FunctionName="WeatherAppModel.Store.uspDeletePosition" />
+    <FunctionImportMapping FunctionImportName="uspGetPositionByName" FunctionName="WeatherAppModel.Store.uspGetPositionByName" />
+    <FunctionImportMapping FunctionImportName="uspUpdateWeather" FunctionName="WeatherAppModel.Store.uspUpdateWeather" />
+    <FunctionImportMapping FunctionImportName="uspGetWeatherByPositionId" FunctionName="WeatherAppModel.Store.uspGetWeatherByPositionId" />
+    <FunctionImportMapping FunctionImportName="uspDeleteWeatherByPositionId" FunctionName="WeatherAppModel.Store.uspDeleteWeatherByPositionId" />
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,48 @@
+﻿@model List<WeatherApp.Weather>
+
+@{
+	String CityName = Model.First().City;
+	ViewBag.Title = "Prognos: " + CityName;
+
+}
+
+<div class="well">
+
+	<h1>5-dagarsprognos för @CityName</h1>
+
+	<table class="table" id="forecast">
+
+		<thead>
+			<tr>
+				@for (int i = 0; i < Model.Count; i++)
+				{
+					var day = Model[i].ValidTime.DayOfWeek;
+					var dayName = System.Globalization.DateTimeFormatInfo.CurrentInfo.GetDayName(day).ToString();
+					var date = Model[i].ValidTime.ToShortDateString();
+					var time = Model[i].ValidTime.ToShortTimeString() + " - " + Model[i].ValidTime.AddHours(6).ToShortTimeString();
+					<th>@dayName<br /><small>@time</small></th>
+				}
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				@for (int i = 0; i < Model.Count; i++)
+				{
+					<td><img src="@Model[i].SymbolUrl" alt="Weather Symbol" /></td>
+				}
+			</tr>
+
+			<tr>
+				@for (int i = 0; i < Model.Count; i++)
+				{
+					<td><span class="bold">@String.Format("{0}°C", Convert.ToInt32(Model[i].Temperature))</span></td>
+				}
+			</tr>
+		</tbody>
+
+	</table>
+
+	<a href="@Url.Action("Index")" id="back-anchor"><span>«</span> tillbaka</a>
+
+</div>

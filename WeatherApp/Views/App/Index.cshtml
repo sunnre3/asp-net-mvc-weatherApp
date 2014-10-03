@@ -1,0 +1,28 @@
+﻿@model WeatherApp.ViewModels.CityViewModel
+
+@{
+	ViewBag.Title = "Startsida";
+}
+
+
+<div class="well">
+
+	<h1>Välkommen!</h1>
+
+	<p>För att få en femdygnsprogrnos var vänlig ange din stad i fältet nedan. Observera att endast svenska städer är giltiga.</p>
+
+	@using (Html.BeginForm("ShowForecast", "App", FormMethod.Get))
+	{
+	 
+	 @Html.ValidationSummary("", new { @class = "alert alert-dismissable alert-danger", @id = "validation-summary" })
+	 
+		<div class="input-group">
+			@Html.TextBoxFor(model => model.City, new { @placeholder = "Ange stad", @id = "inputDefault", @class = "form-control" })
+
+			<span class="input-group-btn">
+				<input type="submit" class="btn btn-default" value="Kör" />
+			</span>
+		</div>
+	}
+
+</div>
