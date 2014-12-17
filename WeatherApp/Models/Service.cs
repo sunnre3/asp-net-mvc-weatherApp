@@ -57,7 +57,7 @@ namespace WeatherApp.Models
 		{
 			// Delete all current weather entries (if any) belonging
 			// to this specific positionId.
-			_repository.DeleteWeatherByPositionId(position.Id);
+			_repository.DeleteWeathersByPositionId(position.Id);
 
 			// Get a new set of weather entries from Yr.no's web API.
 			var forecast = yr.GetWeatherData(position);

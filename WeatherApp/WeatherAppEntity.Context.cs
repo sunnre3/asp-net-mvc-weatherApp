@@ -163,5 +163,35 @@ namespace WeatherApp
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspDeleteWeatherByPositionId", positionIdParameter);
         }
+    
+        public virtual int uspDeleteWeather1(Nullable<int> weatherId)
+        {
+            var weatherIdParameter = weatherId.HasValue ?
+                new ObjectParameter("WeatherId", weatherId) :
+                new ObjectParameter("WeatherId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("uspDeleteWeather1", weatherIdParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<decimal>> uspUpdatePosition(Nullable<int> id, string name, Nullable<double> lat, Nullable<double> lng)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var latParameter = lat.HasValue ?
+                new ObjectParameter("Lat", lat) :
+                new ObjectParameter("Lat", typeof(double));
+    
+            var lngParameter = lng.HasValue ?
+                new ObjectParameter("Lng", lng) :
+                new ObjectParameter("Lng", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("uspUpdatePosition", idParameter, nameParameter, latParameter, lngParameter);
+        }
     }
 }

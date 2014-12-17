@@ -9,8 +9,8 @@ namespace WeatherApp.Models.Repository
 	public interface IRepository : IDisposable
 	{
 		int Add(Position position);
-		void Add(Weather weather);
-		void DeleteWeatherByPositionId(int positionId);
+		int Add(Weather weather);
+		void DeleteWeathersByPositionId(int positionId);
 		void Update(Weather weather);
 		IQueryable<Position> GetPositions();
 		IQueryable<Weather> GetWeathers();

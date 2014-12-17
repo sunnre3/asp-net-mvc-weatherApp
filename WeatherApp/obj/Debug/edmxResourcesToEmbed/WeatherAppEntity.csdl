@@ -79,5 +79,14 @@
     <FunctionImport Name="uspDeleteWeatherByPositionId">
       <Parameter Name="PositionId" Mode="In" Type="Int32" />
     </FunctionImport>
+    <FunctionImport Name="uspDeleteWeather1">
+      <Parameter Name="WeatherId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="uspUpdatePosition" ReturnType="Collection(Decimal)">
+      <Parameter Name="Id" Mode="In" Type="Int32" />
+      <Parameter Name="Name" Mode="In" Type="String" />
+      <Parameter Name="Lat" Mode="In" Type="Double" />
+      <Parameter Name="Lng" Mode="In" Type="Double" />
+    </FunctionImport>
   </EntityContainer>
 </Schema>

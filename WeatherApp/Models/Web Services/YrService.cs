@@ -17,7 +17,7 @@ namespace WeatherApp.Models.Web_Services
 			return String.Format(weatherIconURL, symbolId);
 		}
 
-		public List<Weather> GetWeatherData(Position position, int days = 5)
+		public List<Weather> GetWeatherData(Position position, int days = 3)
 		{
 			// Create a list containing weathers with the correct
 			// number of days which will later be returned.

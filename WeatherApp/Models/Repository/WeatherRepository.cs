@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -12,45 +13,25 @@ namespace WeatherApp.Models.Repository
 
 		public int Add(Position position)
 		{
-			// The stored procedure returns the id of the newly added position.
-			var newId = _entities.uspAddPosition(
-				position.Name,
-				position.Lat,
-				position.Lng
-			);
-
-			// Convert the row returned from the SP to an int and return it.
-			return Convert.ToInt32(newId.FirstOrDefault().Value);
+			var entry = _entities.Position.Add(position);
+			return entry.Id;
 		}
 
-		public void Add(Weather weather)
+		public int Add(Weather weather)
 		{
-			_entities.uspAddWeather(
-				weather.PositionId,
-				weather.Temperature,
-				weather.City,
-				weather.SymbolUrl,
-				weather.ValidTime,
-				weather.NextUpdate
-			);
+			var entry = _entities.Weather.Add(weather);
+			return entry.Id;
 		}
 
-		public void DeleteWeatherByPositionId(int positionId)
+		public void DeleteWeathersByPositionId(int positionId)
 		{
-			_entities.uspDeleteWeatherByPositionId(positionId);
+			var weathers = _entities.Weather.Where(w => w.PositionId == positionId);
+			foreach (var w in weathers) _entities.Weather.Remove(w);
 		}
 
 		public void Update(Weather weather)
 		{
-			_entities.uspUpdateWeather(
-				weather.Id,
-				weather.PositionId,
-				weather.Temperature,
-				weather.City,
-				weather.SymbolUrl,
-				weather.ValidTime,
-				weather.NextUpdate
-				);
+			_entities.Entry(weather).State = EntityState.Modified;
 		}
 
 		public IQueryable<Position> GetPositions()
@@ -65,7 +46,7 @@ namespace WeatherApp.Models.Repository
 
 		public IQueryable<Weather> GetWeathersByPositionId(int positionId)
 		{
-			return _entities.uspGetWeatherByPositionId(positionId).AsQueryable();
+			return _entities.Weather.Where(w => w.PositionId == positionId).AsQueryable();
 		}
 
 		public void Save()

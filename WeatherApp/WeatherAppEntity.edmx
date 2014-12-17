@@ -27,7 +27,9 @@
           <Property Name="NextUpdate" Type="datetime" Nullable="false" />
         </EntityType>
         <Association Name="FK_Weather_Position">
-          <End Role="Position" Type="Self.Position" Multiplicity="1" />
+          <End Role="Position" Type="Self.Position" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Weather" Type="Self.Weather" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Position">
@@ -54,14 +56,17 @@
         <Function Name="uspDeletePosition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PositionId" Type="int" Mode="In" />
         </Function>
-        <Function Name="uspDeleteWeatherByPositionId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="PositionId" Type="int" Mode="In" />
+        <Function Name="uspDeleteWeather" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="WeatherId" Type="int" Mode="In" />
         </Function>
         <Function Name="uspGetPositionByName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Name" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="uspGetWeatherByPositionId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="PositionId" Type="int" Mode="In" />
+        <Function Name="uspUpdatePosition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Lat" Type="float" Mode="In" />
+          <Parameter Name="Lng" Type="float" Mode="In" />
         </Function>
         <Function Name="uspUpdateWeather" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Id" Type="int" Mode="In" />
@@ -163,6 +168,15 @@
           <FunctionImport Name="uspDeleteWeatherByPositionId">
           <Parameter Name="PositionId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="uspDeleteWeather1">
+          <Parameter Name="WeatherId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="uspUpdatePosition" ReturnType="Collection(Decimal)">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Lat" Mode="In" Type="Double" />
+            <Parameter Name="Lng" Mode="In" Type="Double" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -185,11 +199,18 @@
                   <ScalarProperty Name="Lng" ParameterName="Lng" />
                   <ScalarProperty Name="Lat" ParameterName="Lat" />
                   <ScalarProperty Name="Name" ParameterName="Name" />
-                  <ResultBinding Name="Id" ColumnName="Id : Integer" />
+                  <ResultBinding Name="Id" ColumnName="NewPositionId" />
                 </InsertFunction>
                 <DeleteFunction FunctionName="WeatherAppModel.Store.uspDeletePosition" >
                   <ScalarProperty Name="Id" ParameterName="PositionId" />
                 </DeleteFunction>
+                <UpdateFunction FunctionName="WeatherAppModel.Store.uspUpdatePosition">
+                  <ScalarProperty Name="Lng" ParameterName="Lng" Version="Current" />
+                  <ScalarProperty Name="Lat" ParameterName="Lat" Version="Current" />
+                  <ScalarProperty Name="Name" ParameterName="Name" Version="Current" />
+                  <ScalarProperty Name="Id" ParameterName="Id" Version="Current" />
+                  <ResultBinding Name="Id" ColumnName="PositionId" />
+                </UpdateFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -214,6 +235,7 @@
                   <ScalarProperty Name="City" ParameterName="City" />
                   <ScalarProperty Name="Temperature" ParameterName="Temperature" />
                   <ScalarProperty Name="PositionId" ParameterName="PositionId" />
+                  <ResultBinding Name="Id" ColumnName="NewWeatherId" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="WeatherAppModel.Store.uspUpdateWeather">
                   <ScalarProperty Name="SymbolUrl" ParameterName="SymbolUrl" Version="Current" />
@@ -223,7 +245,11 @@
                   <ScalarProperty Name="Temperature" ParameterName="Temperature" Version="Current" />
                   <ScalarProperty Name="PositionId" ParameterName="PositionId" Version="Current" />
                   <ScalarProperty Name="Id" ParameterName="Id" Version="Current" />
+                  <ResultBinding Name="Id" ColumnName="WeatherId" />
                 </UpdateFunction>
+                <DeleteFunction FunctionName="WeatherAppModel.Store.uspDeleteWeather" >
+                  <ScalarProperty Name="Id" ParameterName="WeatherId" />
+                </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -232,9 +258,8 @@
           <FunctionImportMapping FunctionImportName="uspDeletePosition" FunctionName="WeatherAppModel.Store.uspDeletePosition" />
           <FunctionImportMapping FunctionImportName="uspGetPositionByName" FunctionName="WeatherAppModel.Store.uspGetPositionByName" />
           <FunctionImportMapping FunctionImportName="uspUpdateWeather" FunctionName="WeatherAppModel.Store.uspUpdateWeather" />
-          <FunctionImportMapping FunctionImportName="uspGetWeatherByPositionId" FunctionName="WeatherAppModel.Store.uspGetWeatherByPositionId">
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="uspDeleteWeatherByPositionId" FunctionName="WeatherAppModel.Store.uspDeleteWeatherByPositionId" />
+          <FunctionImportMapping FunctionImportName="uspDeleteWeather1" FunctionName="WeatherAppModel.Store.uspDeleteWeather" />
+          <FunctionImportMapping FunctionImportName="uspUpdatePosition" FunctionName="WeatherAppModel.Store.uspUpdatePosition" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
